@@ -1,22 +1,17 @@
-import React from "react";
 import styled from "styled-components";
-import { Grid, TextField, Button, useMediaQuery } from "@mui/material";
+import { Grid, useMediaQuery } from "@mui/material";
 import List from "./List";
+import { useSelector } from "react-redux";
 function DisplayCart() {
-  const mock = [
-    { title: "ירקות ופירות - 2 מוצרים", product: ["תפוח", "אגס"] },
-    { title: "ירקות ופירות - 2 מוצרים", product: ["תפוח", "אגס"] },
-    { title: "ירקות ופירות - 2 מוצרים", product: ["תפוח", "אגס"] },
-    { title: "ירקות ופירות - 2 מוצרים", product: ["תפוח", "אגס"] },
-  ];
+  const data = useSelector((state) => state.data.items);
   return (
     <CartStyle>
       <h1>יש לאסוף מוצרים אלו במחלקות המתאימות</h1>
       <CardBody>
-        {mock.map((item, index) => {
+        {data.map((item, index) => {
           return (
             <Grid item xs={4} key={index} style={{ marginBottom: "10px" }}>
-              <List />
+              <List item={item} />
             </Grid>
           );
         })}
@@ -49,7 +44,9 @@ const CardBody = styled.div`
   text-align: center;
   ul {
     list-style-type: none;
+    padding: 0;
   }
+
   .title {
     &::after {
       content: "";

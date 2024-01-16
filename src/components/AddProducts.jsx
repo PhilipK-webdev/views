@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setData,
-  updateData,
-  updateSubArrayItem,
-} from "../features/getData/getData.js";
+import { setData, updateData } from "../features/getData/getData.js";
 import { setTotal } from "../features/totalItems/totalItems.js";
+import { finishOrder } from "../features/order/finishOrderSlice.js";
 import { Grid, TextField, Button, useMediaQuery } from "@mui/material";
 import styled from "styled-components";
 import SelectProducts from "./Select";
@@ -14,6 +11,7 @@ function AddProducts() {
   const mobile = useMediaQuery("(max-width:820px)");
   const data = useSelector((state) => state.data.items);
   let totalItems = useSelector((state) => state.items.totalItems);
+  let submitOrder = useSelector((state) => state.order.value);
   const [product, setProduct] = useState("");
   const textRef = useRef(null);
   const dispatch = useDispatch();
@@ -118,6 +116,20 @@ function AddProducts() {
           </Button>
         </Grid>
       </Grid>
+      <Button
+        variant="contained"
+        size="large"
+        onClick={() => dispatch(finishOrder(submitOrder))}
+        color="primary"
+        style={{
+          width: "100%",
+          marginTop: "80px",
+          marginBottom: mobile ? "80px" : "0px",
+          padding: "10px",
+        }}
+      >
+        סיים הזמנה
+      </Button>
     </AddProductsStyle>
   );
 }

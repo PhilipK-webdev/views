@@ -1,20 +1,17 @@
 import React from "react";
 
-function List() {
+function List({ item }) {
   return (
     <div>
       {" "}
-      <div className="title">ירקות ופירות - 2 מוצרים</div>
-      <div>
-        <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>2</li>
-
-          <li>2</li>
-          <li>2</li>
-        </ul>
-      </div>
+      <span className="title">{item.category_name}</span>
+      {item.Products.map((p, index) => {
+        return (
+          <ul key={index}>
+            <li>{p.product_value}</li>
+          </ul>
+        );
+      })}
     </div>
   );
 }
