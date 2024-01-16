@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import "./App.css";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment } from "../src/features/counter/counterSlice.js";
-
+import Grid from "@mui/material/Grid";
+import Header from "./components/Header.jsx";
+import AddProducts from "./components/AddProducts.jsx";
+import RtlTextField from "./components/Test.jsx";
 function App() {
   const count = useSelector((state) => state.counter.value);
   const dispatch = useDispatch();
@@ -40,21 +42,10 @@ function App() {
   }, []);
   return (
     <div>
-      <div>
-        <button
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          Increment
-        </button>
-        <span>{count}</span>
-        <button
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          Decrement
-        </button>
-      </div>
+      <Grid container flexDirection={"column"}>
+        <Header />
+        <AddProducts />
+      </Grid>
     </div>
   );
 }
