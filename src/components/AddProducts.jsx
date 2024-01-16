@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setData, updateData } from "../features/getData/getData.js";
+import { setData } from "../features/getData/getData.js";
 import { setTotal } from "../features/totalItems/totalItems.js";
 import { finishOrder } from "../features/order/finishOrderSlice.js";
 import { Grid, TextField, Button, useMediaQuery } from "@mui/material";
+import { validTextField } from "../utils/validation.js";
 import styled from "styled-components";
 import SelectProducts from "./Select";
 
@@ -13,6 +14,7 @@ function AddProducts() {
   let totalItems = useSelector((state) => state.items.totalItems);
   let submitOrder = useSelector((state) => state.order.value);
   const [product, setProduct] = useState("");
+  const [errorProductVal, setErrorProductVal] = useState("");
   const textRef = useRef(null);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -33,7 +35,7 @@ function AddProducts() {
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   const handleSelectProduct = (event) => {
     const { value } = event.target;
@@ -42,7 +44,11 @@ function AddProducts() {
   const handleAddProduct = async (e) => {
     e.preventDefault();
     const textValue = textRef.current.value;
-    if (textValue && product) {
+    const valid = validTextField(textValue);
+    validTextField(textValue)
+      ? setErrorProductVal(() => "")
+      : setErrorProductVal(() => "מוצר לא תקין");
+    if (valid && product) {
       const findIndex = data.findIndex(
         (item) => item.category_name === product
       );
@@ -60,14 +66,16 @@ function AddProducts() {
         };
         const response = await fetch("/api/v1/createProduct", options);
         if (response.status === 200) {
-          dispatch(
-            updateData({ updatedItem: data[findIndex], val: textValue })
-          );
+          const result = await response.json();
+          dispatch(setData(result));
           const count = totalItems + 1;
           dispatch(setTotal(count));
         }
       }
     }
+  };
+  const handleBlur = (e) => {
+    setErrorProductVal("");
   };
   return (
     <AddProductsStyle>
@@ -89,6 +97,9 @@ function AddProducts() {
             size="small"
             label="מוצר"
             inputRef={textRef}
+            error={errorProductVal ? true : false}
+            helperText={errorProductVal}
+            onBlur={handleBlur}
           />
         </Grid>
         <Grid item xs={mobile ? 12 : 4}>
@@ -166,6 +177,10 @@ const AddProductsStyle = styled.div`
   .btn {
     background-color: #92c4f1;
     color: black;
+  }
+  .muirtl-k4qjio-MuiFormHelperText-root.Mui-error {
+    position: absolute;
+    top: 52px;
   }
 `;
 export default AddProducts;

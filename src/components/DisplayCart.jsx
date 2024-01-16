@@ -2,11 +2,16 @@ import styled from "styled-components";
 import { Grid, useMediaQuery } from "@mui/material";
 import List from "./List";
 import { useSelector } from "react-redux";
-function DisplayCart() {
+import { useEffect, useState } from "react";
+function DisplayCart({ title }) {
   const data = useSelector((state) => state.data.items);
+  const mobile = useMediaQuery("(max-width:820px)");
+  const [modifyArray, setModifyArray] = useState([]);
+
+  console.log(data);
   return (
-    <CartStyle>
-      <h1>יש לאסוף מוצרים אלו במחלקות המתאימות</h1>
+    <CartStyle mobile={mobile}>
+      <h1>{title || "יש לאסוף מוצרים אלו במחלקות המתאימות"} </h1>
       <CardBody>
         {data.map((item, index) => {
           return (
@@ -36,6 +41,11 @@ const CartStyle = styled.div`
     color: #00a1e8;
     margin-bottom: 35px;
   }
+  @media (max-width: 820px) {
+    h1 {
+      font-size: 20px;
+    }
+  }
 `;
 const CardBody = styled.div`
   display: flex;
@@ -55,6 +65,18 @@ const CardBody = styled.div`
       margin-top: 10px;
       margin-right: 50px;
       display: block;
+    }
+  }
+  @media (max-width: 820px) {
+    .title {
+      &::after {
+        content: "";
+        border-bottom: 1px solid #ededed;
+        width: 70%;
+        margin-top: 10px;
+        margin-right: 20px;
+        display: block;
+      }
     }
   }
 `;

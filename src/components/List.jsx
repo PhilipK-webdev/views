@@ -1,14 +1,21 @@
 import React from "react";
 
 function List({ item }) {
+  const productCounts = item.Products.reduce((counts, product) => {
+    counts[product.product_value] = (counts[product.product_value] || 0) + 1;
+    return counts;
+  }, {});
+  console.log(productCounts);
   return (
     <div>
       {" "}
       <span className="title">{item.category_name}</span>
-      {item.Products.map((p, index) => {
+      {Object.entries(productCounts).map(([key, value]) => {
         return (
-          <ul key={index}>
-            <li>{p.product_value}</li>
+          <ul key={key}>
+            <li>
+              {key} {value > 1 && value}
+            </li>
           </ul>
         );
       })}
